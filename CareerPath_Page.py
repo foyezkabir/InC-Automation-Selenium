@@ -2,7 +2,7 @@ import time
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
-
+from constants import DeviceView
 from base_page import BasePage
 
 
@@ -37,9 +37,11 @@ class Careerpage(BasePage):
     REGISTER_BUTTON = (By.XPATH, "//button[normalize-space()='Register']")
     LOGIN_PAGE = (By.XPATH, "//a[normalize-space()='Log In']")
     THREE_DOT = (By.XPATH, "(//*[name()='svg'][@stroke='currentColor'])[1]")
+    CAREER_PAGE_MOBILE = (By.XPATH, "//a[contains(text(),'Career Path')]")
 
-    def __init__(self, driver):
+    def __init__(self, driver, view):
         super().__init__(driver)
+        self.view = view
 
     def navigate_to_career(self):
         self.click(*self.CAREER_PAGE)
@@ -51,23 +53,17 @@ class Careerpage(BasePage):
         except Exception as e:
             print(f"Error clicking three-dot menu: {e}")
 
-    def courseenroll(self, chromeoptions):
-        # window_size = self.driver.ChromeOptions()
-        width = chromeoptions.get_window_size()['width']
-        print("width", width)
+    def mobile_courseenroll(self):
+        self.click_three_dot_menu()
+        time.sleep(2)
+        self.click(*self.CAREER_PAGE_MOBILE)
+        time.sleep(2)
 
-        if width <= 768:  # Assuming mobile view if width is 768px or less
-            self.click_three_dot_menu()
-            time.sleep(2)
-
+    def desktop_courseenroll(self):
+        self.click(*self.CAREER_PAGE)
+        time.sleep(1)
         self.click(*self.COURSE)
         time.sleep(2)
-        # self.click(*self.COURSE_LIVE)
-        # time.sleep(2)
-        # self.click(*self.COURSE_Project)
-        # time.sleep(2)
-        # self.click(*self.COURSE_Resource)
-        # time.sleep(2)
         self.click(*self.COURSE_ENROLL)
         time.sleep(2)
         self.wait_for_element(*self.USER_LOGIN).send_keys("kabirwiit00@gmail.com")
@@ -78,3 +74,9 @@ class Careerpage(BasePage):
         time.sleep(2)
         self.click(*self.LOGIN_BUTTON)
         time.sleep(4)
+
+    def courseenroll(self):
+        if self.view == DeviceView.MOBILE:
+            self.mobile_courseenroll()
+        else:
+            self.desktop_courseenroll()

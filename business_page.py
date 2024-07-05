@@ -29,10 +29,8 @@ class BusinessPage(BasePage):
     LAST_NAME_ERROR = (By.XPATH, "(//span[contains(text(),'This field is required')])[1]")
     PHONE_ERROR = (By.XPATH, "(//span[contains(text(),'This field is required')])[3]")
     EMAIL_ERROR = (By.XPATH, "//div[@role='dialog']//div//div[2]//div[2]//div[1]//span[2]")
-    COMPANY_NAME_ERROR = (
-    By.XPATH, "//body//div[@role='presentation']//div[@role='presentation']//div[3]//div[1]//div[1]//span[2]")
-    COMPANY_ADDRESS_ERROR = (
-    By.XPATH, "//body//div[@role='presentation']//div[@role='presentation']//div[3]//div[2]//div[1]//span[2]")
+    COMPANY_NAME_ERROR = (By.XPATH, "//body//div[@role='presentation']//div[@role='presentation']//div[3]//div[1]//div[1]//span[2]")
+    COMPANY_ADDRESS_ERROR = (By.XPATH, "//body//div[@role='presentation']//div[@role='presentation']//div[3]//div[2]//div[1]//span[2]")
     COMPANY_SIZE_ERROR = (By.XPATH, "(//span[contains(text(),'This field is required')])[7]")
     NUMBER_TRAINEES_ERROR = (By.XPATH, "(//span[contains(text(),'This field is required')])[8]")
     TRAINING_TOPIC_ERROR = (By.XPATH, "//div[5]//div[1]//div[1]//span[2]")

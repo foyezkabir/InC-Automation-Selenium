@@ -9,55 +9,49 @@ from home_page import HomePage
 from business_page import BusinessPage
 from CareerPath_Page import Careerpage
 from Search_bar import SearchCourse
-
-# Initialize driver to None
-driver = None
-
-chromeoptions = webdriver.ChromeOptions()
+from constants import DeviceView, Browsers
 
 
 def get_user_preference():
     while True:
-        view_preference = input("Enter '1' for desktop view or '2' for mobile view: ")
-        if view_preference in ['1', '2']:
+        view_preference = input(f"Enter {DeviceView.DESKTOP} for desktop view or {DeviceView.MOBILE} for mobile view: ")
+        if view_preference in [DeviceView.MOBILE, DeviceView.DESKTOP]:
             return view_preference
         else:
             print("Invalid input. Please enter '1' or '2'.")
 
-def main():
-    view_preference = get_user_preference()
-    if view_preference == '1':
-        chromeoptions = webdriver.ChromeOptions()
-        chromeoptions.add_argument("--start-fullscreen")
-    else:  # '2' for mobile view
-        chromeoptions = webdriver.ChromeOptions()
-        chromeoptions.add_argument("--window-size=375,812")
-    return chromeoptions
 
+def get_driver_and_option(browsername, view):
+    chrome_options = webdriver.ChromeOptions()
+    firefox_options = webdriver.FirefoxOptions()
 
-chromeoptions = main()
+    if view == DeviceView.MOBILE:
+        chrome_options.add_argument("--window-size=375,812")
 
-# chromeoptions = webdriver.ChromeOptions()
-# chromeoptions.add_argument("--start-fullscreen")
-# chromeoptions.add_argument("--window-size=375,812")
+        firefox_options.add_argument("--width=375")
+        firefox_options.add_argument("--height=812")
+
+    else:
+        chrome_options.add_argument("--start-fullscreen")
+        firefox_options.add_argument("--start-fullscreen")
+
+    if browsername == Browsers.Chrome:
+        return webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()),
+                                options=chrome_options), chrome_options
+    elif browsername == Browsers.Firefox:
+        return webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()),
+                                 options=firefox_options), firefox_options
+    elif browsername == Browsers.InternetExplorer:
+        return webdriver.Ie(options=chrome_options), chrome_options
+    elif browsername == Browsers.Edge:
+        return webdriver.Edge(options=chrome_options), chrome_options
+
+    raise ValueError("Browser Not Found")
+
 
 # Specify the browser to use
-browsername = "chrome"
-
-# Initialize the webdriver based on the specified browser
-if browsername == "chrome":
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chromeoptions)
-elif browsername == "firefox":
-    driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=chromeoptions)
-elif browsername == "internetExplorer":
-    driver = webdriver.Ie(options=chromeoptions)
-elif browsername == "edge":
-    driver = webdriver.Edge(options=chromeoptions)
-else:
-    print("Please pass the correct browser name: chrome, firefox, edge, or internetExplorer: ", browsername)
-
-# Maximizes the browser window to fill the entire screen.
-# driver.maximize_window()
+view = get_user_preference()
+driver, current_option = get_driver_and_option(Browsers.Chrome, view)
 
 # Navigate to a specific URL
 if driver is not None:
@@ -69,25 +63,24 @@ if driver is not None:
     home_page.close_advertisement()
     time.sleep(1)
 
-    # home_page.scroll_to_bottom()
-    # time.sleep(4)
-    #
-    # home_page.scroll_to_top()
-    # time.sleep(4)
+    home_page.scroll_to_bottom()
+    time.sleep(4)
+
+    home_page.scroll_to_top()
+    time.sleep(4)
 
     # Search for a course from the search bar
-    # Search_bar = SearchCourse(driver)
-    # Search_bar.search_course("Flutter")
-    # time.sleep(4)
-    # assert Search_bar.verify_search_results("Flutter App Development Career Path - Batch 2"), "Search result not found"
-    # time.sleep(2)
+    Search_bar = SearchCourse(driver)
+    Search_bar.search_course("Flutter")
+    time.sleep(4)
 
     # Navigate to Career Path page
-    CareerPath_Page = Careerpage(driver)
-    CareerPath_Page.courseenroll(chromeoptions)
+    CareerPath_Page = Careerpage(driver, view)
+
+    CareerPath_Page.courseenroll()
     time.sleep(2)
-    CareerPath_Page.navigate_to_career()
-    time.sleep(6)
+    # CareerPath_Page.navigate_to_career()
+    # time.sleep(6)
 
     # Navigate to Business page
     business_page = BusinessPage(driver)
