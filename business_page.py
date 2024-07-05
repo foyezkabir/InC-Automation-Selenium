@@ -45,6 +45,7 @@ class BusinessPage(BasePage):
     def navigate_to_business(self):
         self.click(*self.BUSINESS_PAGE)
 
+
     # Iterates through each option in the dropdown, selects it, and reopens the dropdown for the next selection. Finally, selects a specified option.
     def interact_with_dropdown(self, locator, final_option):
         select_element = Select(self.wait_for_element(*locator))

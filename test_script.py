@@ -7,7 +7,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 from home_page import HomePage
 from business_page import BusinessPage
-from CareerPath_Page import Careerpage
+from careerpath_page import Careerpage
 from Search_bar import SearchCourse
 from constants import DeviceView, Browsers
 
@@ -75,12 +75,10 @@ if driver is not None:
     time.sleep(4)
 
     # Navigate to Career Path page
-    CareerPath_Page = Careerpage(driver, view)
+    careerpath_page = Careerpage(driver, view)
 
-    CareerPath_Page.courseenroll()
+    careerpath_page.courseenroll()
     time.sleep(2)
-    # CareerPath_Page.navigate_to_career()
-    # time.sleep(6)
 
     # Navigate to Business page
     business_page = BusinessPage(driver)
