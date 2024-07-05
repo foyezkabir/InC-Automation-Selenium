@@ -8,7 +8,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 from home_page import HomePage
 from business_page import BusinessPage
 from careerpath_page import Careerpage
-from Search_bar import SearchCourse
+from search_bar import SearchCourse
 from constants import DeviceView, Browsers
 
 
